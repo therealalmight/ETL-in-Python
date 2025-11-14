@@ -1,67 +1,94 @@
-import pandas as pd
-from sqlalchemy import create_engine, exc
 import os
+import pandas as pd
+from sqlalchemy import create_engine, exc, text
 
-def load_to_mysql(df, table_name, engine):
+
+class MySQLDataLoader:
     """
-    Load a pandas DataFrame to MySQL with error handling.
+    Encapsulates MySQL loading, SQL execution, and parquet ingestion
+    using SQLAlchemy + PyMySQL + Pandas.
     """
-    try:
-        df.to_sql(table_name, con=engine, if_exists="append", index=False)
-        print(f"Data loaded successfully into '{table_name}'.")
 
-    except exc.OperationalError as e:
-        print(f"Operational error while loading '{table_name}': {e}")
+    def __init__(self, connection_url: str, echo: bool = False):
+        self.connection_url = connection_url
+        self.engine = create_engine(connection_url, echo=echo, future=True)
 
-    except exc.ProgrammingError as e:
-        print(f"Programming error in '{table_name}': {e}")
+    # ---------------------------------------------------------
+    # Run SQL file
+    # ---------------------------------------------------------
+    def run_sql_file(self, sql_file_path: str):
+        """
+        Reads a .sql file and executes it using SQLAlchemy.
+        Supports multi-statement SQL scripts.
+        """
+        try:
+            with open(sql_file_path, "r", encoding="utf-8") as f:
+                sql_commands = f.read()
 
-    except exc.IntegrityError as e:
-        print(f"Integrity error in '{table_name}': {e}")
+            with self.engine.connect() as conn:
+                for statement in sql_commands.split(";"):
+                    stmt = statement.strip()
+                    if stmt:
+                        conn.execute(text(stmt))
+                conn.commit()
 
-    except Exception as e:
-        print(f"Unexpected error occurred while loading '{table_name}': {e}")
+            print(f"✅ Executed SQL file: {sql_file_path}")
 
+        except FileNotFoundError:
+            print(f"❌ SQL file not found: {sql_file_path}")
 
-def load_all_parquets_to_mysql(directory, connection_url, table_name_map=None):
-    """
-    Load all parquet files in a directory into MySQL tables.
-    - directory: path containing parquet files
-    - connection_url: SQLAlchemy MySQL connection string
-    - table_name_map: optional dict mapping filenames to table names
-    """
-    engine = create_engine(connection_url)
+        except Exception as e:
+            print(f"❌ Error executing SQL file '{sql_file_path}': {e}")
 
-    try:
-        for file in os.listdir(directory):
-            if file.endswith(".parquet"):
-                file_path = os.path.join(directory, file)
-                df = pd.read_parquet(file_path)
+    # ---------------------------------------------------------
+    # Load DataFrame into MySQL
+    # ---------------------------------------------------------
+    def load_to_mysql(self, df: pd.DataFrame, table_name: str):
+        """
+        Load a pandas DataFrame to MySQL with error handling.
+        """
+        try:
+            df.to_sql(table_name, con=self.engine, if_exists="append", index=False)
+            print(f"✅ Loaded data into table '{table_name}'.")
 
-                # Determine table name
-                base_name = os.path.splitext(file)[0]
-                table_name = table_name_map.get(base_name, base_name) if table_name_map else base_name
+        except exc.OperationalError as e:
+            print(f"❌ Operational error on '{table_name}': {e}")
 
-                print(f"\n🚀 Loading '{file}' into table '{table_name}'...")
-                load_to_mysql(df, table_name, engine)
+        except exc.ProgrammingError as e:
+            print(f"❌ Programming error on '{table_name}': {e}")
 
-    finally:
-        engine.dispose()
-        print("\n🔒 Database connection closed.")
+        except exc.IntegrityError as e:
+            print(f"❌ Integrity error on '{table_name}': {e}")
 
+        except Exception as e:
+            print(f"❌ Unexpected error loading '{table_name}': {e}")
 
-# === Example usage ===
-connection_url = "mysql+pymysql://db_user:6equj5_root@127.0.0.1:3306/home_db"
-gold_path = "src/data_lake/gold/"
+    # ---------------------------------------------------------
+    # Load all Parquet files in a directory
+    # ---------------------------------------------------------
+    def load_parquet_directory(self, directory: str, table_name_map: dict = None):
+        """
+        Loads all .parquet files in a folder to MySQL.
+        table_name_map can override the default table names.
+        """
+        try:
+            for file in os.listdir(directory):
+                if file.endswith(".parquet"):
+                    file_path = os.path.join(directory, file)
+                    df = pd.read_parquet(file_path)
 
-# Optional mapping (if parquet names differ from table names)
-table_name_map = {
-    "DimProperty": "DimProperty",
-    "DimLeads": "DimLeads",
-    "FactsValuation": "FactsValuation",
-    "DimHoa": "DimHoa",
-    "DimRehab": "DimRehab",
-    "DimTaxes": "DimTaxes"
-}
+                    base_name = os.path.splitext(file)[0]
+                    table_name = (
+                        table_name_map.get(base_name, base_name)
+                        if table_name_map else base_name
+                    )
 
-load_all_parquets_to_mysql(gold_path, connection_url, table_name_map)
+                    print(f"\n🚀 Loading '{file}' → table '{table_name}'")
+                    self.load_to_mysql(df, table_name)
+
+        except Exception as e:
+            print(f"❌ Error loading parquet directory: {e}")
+
+        finally:
+            self.engine.dispose()
+            print("\n🔒 Database connection closed.")

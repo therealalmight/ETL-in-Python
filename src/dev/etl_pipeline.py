@@ -1,6 +1,6 @@
 from extract import *
 from transform import *
-#from load import *
+from load import *
 from data_validation import *
 #list requirements
 with open("requirements.txt", "r") as file:
@@ -40,3 +40,13 @@ print("Logged... Check the file")
 #------------------------
 #---- Loading -----------
 #------------------------
+print("Loading.... Wait")
+mysql = MySQLDataLoader("mysql+pymysql://root:6equj5_root@127.0.0.1:3306/home_db")
+mysql.run_sql_file("src/dev/func_data_model.sql")
+mysql.load_to_mysql()
+mysql.load_parquet_directory()
+print("Loading Done....")
+
+#-----------------
+#--Pipeline Done--
+#-----------------
