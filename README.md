@@ -82,4 +82,7 @@ For MySQL Docker image reference:
 ## Solutions and Instructions (Filed by Candidate)
 
 **Just Get the required packages listed in requirements.txt and run etl_pipeline.py**
-####NOTE: sample.txt are just dummy empty files inserted to retain data_lake folder just becausing empty data_lake causing issue while pushing from local env to github env. Please don't consider those files they are of no use. 
+
+
+
+#### NOTE: sample.txt are just dummy empty files inserted to retain data_lake folder just becausing empty data_lake causing issue while pushing from local env to github env. Please don't consider those files they are of no use. 
