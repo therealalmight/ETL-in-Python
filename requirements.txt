@@ -1,0 +1,5 @@
+pandas : since data is not too big we can move with pandas instead of pyspark
+pyarrow: read and write parquet efficiently suggested by pandas itself
+pydantic: popular data validation library
+sqlalchemy: interface to connect database
+pymysql: mysql driver in python

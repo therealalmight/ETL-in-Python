@@ -1,5 +1,3 @@
-# BalaSourvendraAssessment
-
 # Data Engineering Assessment
 
 Welcome!  
