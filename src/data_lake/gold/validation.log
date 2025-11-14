@@ -1,6 +1,105 @@
 
 
-=== Validation Run: 2025-11-14 04:45:22 ===
+=== Validation Run: 2025-11-14 05:25:59 ===
+
+ Validating DimProperty ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimLeads ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating FactsValuation ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimHoa ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimRehab ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimTaxes ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+
+=== Validation Run: 2025-11-14 08:44:26 ===
+
+ Validating DimProperty ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimLeads ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating FactsValuation ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimHoa ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimRehab ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimTaxes ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+
+=== Validation Run: 2025-11-14 08:50:54 ===
+
+ Validating DimProperty ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimLeads ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating FactsValuation ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimHoa ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimRehab ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+ Validating DimTaxes ...
+Valid rows: 70987
+Invalid rows: 0
+
+
+
+=== Validation Run: 2025-11-14 08:54:57 ===
 
  Validating DimProperty ...
 Valid rows: 70987
