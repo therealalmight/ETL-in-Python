@@ -68,20 +68,7 @@ For MySQL Docker image reference:
 
 ---
 
-## Submission Guidelines
-
-- Edit the section to the bottom of this README with your solutions and instructions for each section at the bottom.
-- Ensure all steps are fully **reproducible** using your documentation
-- DO NOT MAKE THE REPOSITORY PUBLIC. ANY CANDIDATE WHO DOES IT WILL BE AUTO REJECTED.
-- Create a new private repo and invite the reviewer https://github.com/mantreshjain and https://github.com/siddhuorama
-
 ---
-
-**Good luck! We look forward to your submission.**
-
-## Solutions and Instructions (Filed by Candidate)
-
-**Just Get the required packages listed in requirements.txt and run etl_pipeline.py**
 
 
 
